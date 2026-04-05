@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Resultado</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Endereço</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-card *ngIf="cepService.resultadoCep">
+    <ion-card-header>
+      <ion-card-title>
+        CEP {{cepService.resultadoCep.cep}}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+    </ion-card-content>
+  </ion-card>
+  <div class="content-loc">
+    <p>Logradouro: {{cepService.resultadoCep.logradouro}}</p>
+    <p>Bairro: {{cepService.resultadoCep.bairro}}</p>
+    <p>Cidade: {{cepService.resultadoCep.localidade}}</p>
+    <p>UF: {{cepService.resultadoCep.uf}}</p>
+  </div>
+</ion-content>

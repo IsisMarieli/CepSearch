@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Buscar CEP</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Buscar CEP</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-item>
+    <ion-input placeholder="Digite o CEP" [(ngModel)]="cep">
+    </ion-input>
+  </ion-item>
+  <ion-button class="button-cep" expand="block" (click)="buscar()">
+    Buscar CEP
+  </ion-button>
+</ion-content>
