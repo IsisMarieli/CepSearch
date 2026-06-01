@@ -11,7 +11,7 @@
 
 ## 📖 Sobre o projeto
 
-Aplicativo mobile desenvolvido com **Ionic Framework** e **Angular**, utilizando arquitetura orientada a serviços. O usuário digita um CEP, o app consulta a API ViaCEP em tempo real e exibe o endereço completo, além de manter um histórico local das consultas realizadas.
+[cite_start]Aplicativo mobile desenvolvido com **Ionic Framework** e **Angular**, utilizando arquitetura orientada a serviços (NgModules)[cite: 27, 64]. O usuário digita um CEP, o app consulta a API ViaCEP em tempo real, exibe o endereço completo e gerencia de forma dinâmica um histórico persistente das buscas realizadas.
 
 ---
 
@@ -19,79 +19,81 @@ Aplicativo mobile desenvolvido com **Ionic Framework** e **Angular**, utilizando
 
 | Tab | Tela | Descrição |
 |-----|------|-----------|
-| **Tab 1** | Buscar CEP | Campo de entrada para digitar o CEP e disparar a consulta à API |
-| **Tab 2** | Exibir Endereço | Apresenta logradouro, bairro, cidade, UF e complemento do endereço encontrado |
-| **Tab 3** | Histórico | Lista de todos os CEPs consultados na sessão com acesso rápido ao resultado |
+| **Tab 1** | Buscar CEP | Campo de entrada com validações para digitação do CEP e disparo da consulta HTTP. |
+| **Tab 2** | Exibir Endereço | Apresenta os dados detalhados da busca (logradouro, bairro, cidade, UF). Exibe tela de "Estado Vazio" caso nenhuma pesquisa tenha sido feita. |
+| **Tab 3** | Histórico | Lista cronológica dos CEPs consultados com armazenamento persistente e atalhos para exclusão individual ou total. |
+
+![Tela 1](cepApp/src/assets/tab1.png)
+![Tela 2](cepApp/src/assets/tab2.png)
+![Tela 3](cepApp/src/assets/tab3.png)
+---
+
+## 🚀 Implementações da Segunda Parte
+
+A evolução do projeto contemplou recursos avançados de experiência de usuário (UX) e segurança de dados local:
+
+### 1. Persistência de Dados com `localStorage`
+- [cite_start]Integração com o ecossistema de armazenamento do navegador e da WebView móvel[cite: 69, 173].
+- [cite_start]Utilização de `JSON.stringify()` para serialização de arrays de objetos e `JSON.parse()` para recuperação segura durante a inicialização do app (`ngOnInit`)[cite: 84, 85, 104, 124, 173].
+- [cite_start]Os dados não são perdidos caso a aplicação seja atualizada ou fechada[cite: 30, 171, 173].
+
+### 2. Tratamento de Estados Vazios e Condicionais (`*ngIf`)
+- **Proteção de Interface:** Correção do erro de propriedades indefinidas (`TypeError: Cannot read properties of undefined`) utilizando diretivas estruturais `*ngIf; else` no carregamento dos atributos assíncronos.
+- **Feedback Visual:** Criação de templates amigáveis com `<ng-template>` exibindo ícones e mensagens instrutivas (ex: *"Nenhum endereço pesquisado ainda"*) quando variáveis locais ou arrays do histórico encontram-se vazios.
+
+### 3. Alertas Clássicos de Confirmação (`AlertController`)
+- Implementação de popups nativos de interface gráfica do Ionic para notificar o usuário instantaneamente quando um endereço é localizado com sucesso, melhorando a responsividade visual do aplicativo.
+
+### 4. Resolução de Desafios Acadêmicos 🏆
+[cite_start]Seguindo as diretrizes práticas propostas pelo Prof. João Ferreira[cite: 3]:
+- [cite_start]**Persistência de Objetos Completos:** Adaptação da estrutura para salvar o mapeamento de dicionários inteiros contendo logradouro, bairro e localidade, em vez de strings simples[cite: 176].
+- [cite_start]**Botão Limpar Tudo:** Inclusão de um método global `localStorage.clear()` acionado por um botão de controle na barra superior da listagem de histórico para expurgar todos os dados de uma vez só[cite: 25, 80, 178].
 
 ---
 
 ## 🛠️ Tecnologias
 
-- **Ionic Framework** — UI components nativos para Android e iOS
-- **Angular** — Framework SPA com injeção de dependência
-- **TypeScript** — Tipagem estática e interfaces de dados
-- **ViaCEP API** — API pública gratuita de consulta de CEPs
-- **HttpClient** — Módulo Angular para requisições HTTP
-- **Angular Service** — Camada de serviço para lógica de negócio
+- **Ionic Framework 7** — Componentes de UI nativos e controladores de feedback (Alerts)
+- [cite_start]**Angular 17** — Framework SPA utilizando arquitetura baseada em `NgModules` [cite: 27]
+- **TypeScript 5** — Tipagem estática estruturada
+- **ViaCEP API** — API pública para consulta de endereços
+- [cite_start]**Web Storage API** — Mecanismo síncrono para retenção de dados via `localStorage` [cite: 69, 175]
 
 ---
 
-## 🔄 Fluxo da aplicação
+## 🔄 Fluxo de Dados Atualizado
 
-```
-Usuário digita CEP → CepService.buscar() → GET ViaCEP → Tab 2 exibe endereço → Tab 3 salva no histórico
-```
-
-## 🗂️ Estrutura do projeto
-
-```
-src/app/
-├── tabs/                  # Roteamento das tabs
-│   ├── tabs.page.html
-│   ├── tabs.page.ts
-│   └── tabs-routing.module.ts
-├── tab1/                  # Tela: Buscar CEP
-│   ├── tab1.page.html
-│   └── tab1.page.ts
-├── tab2/                  # Tela: Exibir endereço
-│   ├── tab2.page.html
-│   └── tab2.page.ts
-├── tab3/                  # Tela: Histórico
-│   ├── tab3.page.html
-│   └── tab3.page.ts
-└── services/
-    └── cep.service.ts     # Lógica + HttpClient + histórico
-```
+![Fluxo de dados](cepApp/src/assets/diagram.png)
 
 ---
 
 ## ⚙️ Como executar
 
 ### Pré-requisitos
-
-- Node.js 
+- Node.js (versão LTS recomendada)
 - npm
-- Ionic CLI
+- Ionic CLI instalado globalmente (`npm install -g @ionic/cli`)
 
-### Instalação
+### Inicialização do Ambiente
 
 ```bash
-# Instalar o Ionic CLI globalmente
-npm install -g @ionic/cli
-
-# Criar o projeto com tabs
-ionic start cepApp tabs --type=angular
-
-# Entrar na pasta do projeto
+# Clone o repositório ou acesse a pasta do projeto
 cd cepApp
 
-# Instalar dependências
+# Instale todas as dependências declaradas no package.json
 npm install
 
-# Rodar no navegador
+# Caso haja conflito de versões de pacotes legados, utilize:
+npm install --legacy-peer-deps
+
+# Inicie o servidor de desenvolvimento local
 ionic serve
 ```
 
 ---
 
-Projeto acadêmico · Ionic + Angular · ViaCEP
+## 🧑‍💻 Aluna: Isis Marieli da Silva Moura
+
+- **Matrícula:** 01482889
+
+**Projeto Acadêmico**
