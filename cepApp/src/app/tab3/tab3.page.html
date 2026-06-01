@@ -1,18 +1,36 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Histórico</ion-title>
+    <ion-buttons slot="end" *ngIf="cepService.historico.length > 0">
+      <ion-button color="danger" (click)="cepService.limparTudo()">
+        Limpar Tudo
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Cidade</ion-title>
+      <ion-title size="large">Histórico</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-list>
-    <ion-item *ngFor="let item of cepService.historico">
+
+  <ion-list *ngIf="cepService.historico.length > 0">
+    <ion-item *ngFor="let item of cepService.historico; let i = index">
       <ion-label>
-        <p>{{item.localidade}} - {{item.uf}}</p>
+        <h2>CEP: {{ item.cep }}</h2>
+        <p>{{item.localidade}} - {{ item.uf }}</p>
+        <p *ngIf="item.logradouro">{{ item.logradouro }}</p>
       </ion-label>
+      
+      <ion-button slot="end" color="danger" fill="clear" (click)="cepService.removerItem(i)">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
+
+  <div *ngIf="cepService.historico.length === 0" class="ion-padding ion-text-center">
+    <p>Nenhum endereço no histórico.</p>
+  </div>
+</ion-content>
